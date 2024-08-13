@@ -1,0 +1,77 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  blog-backend
+
+  SAM Template for blog-backend
+
+Globals:
+  Function:
+    Timeout: 3
+    MemorySize: 128
+
+Resources:
+  CreateBlogFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: createBlog/
+      Handler: app.lambdaHandler
+      Runtime: nodejs16.x
+      Architectures:
+        - x86_64
+      Events:
+        CreateBlogApi:
+          Type: Api
+          Properties:
+            Path: /create-blog
+            Method: post
+
+  GetBlogFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: getBlog/
+      Handler: app.lambdaHandler
+      Runtime: nodejs16.x
+      Architectures:
+        - x86_64
+      Events:
+        GetBlogApi:
+          Type: Api
+          Properties:
+            Path: /get-blog/{id}
+            Method: get
+
+  UpdateBlogFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: updateBlog/
+      Handler: app.lambdaHandler
+      Runtime: nodejs16.x
+      Architectures:
+        - x86_64
+      Events:
+        UpdateBlogApi:
+          Type: Api
+          Properties:
+            Path: /update-blog/{id}
+            Method: put
+
+  DeleteBlogFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: deleteBlog/
+      Handler: app.lambdaHandler
+      Runtime: nodejs16.x
+      Architectures:
+        - x86_64
+      Events:
+        DeleteBlogApi:
+          Type: Api
+          Properties:
+            Path: /delete-blog/{id}
+            Method: delete
+
+Outputs:
+  ApiEndpoint:
+    Description: "API Gateway endpoint URL for the Prod stage"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
